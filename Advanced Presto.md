@@ -33,3 +33,15 @@ ARBITRARY(col)
 ```sql
 APPROX_PERCENTILE(col, ARRAY[0.1, 0.5, 0.9]) -- Returns an array of 10th, 50th, 90th percentiles for col
 ```
+
+## JSON
+
+#### Extract value for Key
+```sql
+JSON_EXTRACT(map_col, 'key') --Gets value for key from map_col
+```
+
+####Parse string to JSON array
+```sql
+CAST(JSON_PARSE(str_col) AS ARRAY<JSON>)
+```
