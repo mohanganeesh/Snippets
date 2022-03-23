@@ -45,3 +45,13 @@ JSON_EXTRACT(map_col, 'key') --Gets value for key from map_col
 ```sql
 CAST(JSON_PARSE(str_col) AS ARRAY<JSON>)
 ```
+
+## Advanced Data Types
+
+#### MAP / STRUCT (ROW) / ARRAY
+```sql
+  MAP(ARRAY['col1','col2','col3'],ARRAY[col1,col2,col3]) lm, --Creates map, not struct
+  CAST(ROW(col1,col2,col3) as ROW(col1 int, col2 int, col3 int)) ls, --Creates struct with names. Downside is requires defining datatypes
+  ROW(col1,col2,col3) ls2, --Creates Struct without name but with index. Need to access with position like an array
+  ARRAY[col1,col2,col3] la --Creates an array
+```
