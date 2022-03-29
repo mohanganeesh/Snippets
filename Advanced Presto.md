@@ -41,7 +41,7 @@ APPROX_PERCENTILE(col, ARRAY[0.1, 0.5, 0.9]) -- Returns an array of 10th, 50th, 
 JSON_EXTRACT(map_col, 'key') --Gets value for key from map_col
 ```
 
-####Parse string to JSON array
+#### Parse string to JSON array
 ```sql
 CAST(JSON_PARSE(str_col) AS ARRAY<JSON>)
 ```
@@ -54,4 +54,8 @@ CAST(JSON_PARSE(str_col) AS ARRAY<JSON>)
   CAST(ROW(col1,col2,col3) as ROW(col1 int, col2 int, col3 int)) ls, --Creates struct with names. Downside is requires defining datatypes
   ROW(col1,col2,col3) ls2, --Creates Struct without name but with index. Need to access with position like an array
   ARRAY[col1,col2,col3] la --Creates an array
+```
+#### Get all keys in a MAP
+```sql
+CROSS JOIN UNNEST(MAP_KEYS(mapcol)) as k(key)
 ```
