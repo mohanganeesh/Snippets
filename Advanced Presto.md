@@ -48,14 +48,27 @@ CAST(JSON_PARSE(str_col) AS ARRAY<JSON>)
 
 ## Advanced Data Types
 
-#### MAP / STRUCT (ROW) / ARRAY
+#### Create MAP / STRUCT (ROW) / ARRAY 
 ```sql
   MAP(ARRAY['col1','col2','col3'],ARRAY[col1,col2,col3]) lm, --Creates map, not struct
   CAST(ROW(col1,col2,col3) as ROW(col1 int, col2 int, col3 int)) ls, --Creates struct with names. Downside is requires defining datatypes
   ROW(col1,col2,col3) ls2, --Creates Struct without name but with index. Need to access with position like an array
   ARRAY[col1,col2,col3] la --Creates an array
 ```
+
+#### Select from MAP / STRUCT (ROW) / ARRAY 
+
+```sql
+SELECT lm['col1'] --Select from MAP
+SELECT ls.col1 --Select from STRUCT
+SELECT ls2[1] --Selects from STRUCT without name using index. Index starts at 1?
+SELECT la[1] --Selects from ARRAY with index
+```
+
 #### Get all keys in a MAP
 ```sql
+SELECT k.key
+FROM tablename
 CROSS JOIN UNNEST(MAP_KEYS(mapcol)) as k(key)
+GROUP BY 1
 ```
