@@ -1,8 +1,13 @@
 ## Array
 
-#### Aggregate string to array
+#### Aggregate columnn values to array
 ```sql
-select SET_UNION(string_col) from tablename
+select ARRAY_AGG(col) from tablename
+```
+
+#### Combine arrays to return unique values across all arrays (Note: will lose multiple occurances of same value)
+```sql
+select SET_UNION(array_col) from tablename
 ```
 
 #### Create array from strings
