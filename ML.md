@@ -1,9 +1,25 @@
 ## Preprocessing
-### One Hot encoding
+### Categorical variables 
+(More types: https://towardsdatascience.com/all-about-categorical-variable-encoding-305f3361fd02)
+#### 1. One Hot encoding
 ```py
 df = pd.get_dummies(df, columns=[categ_column_names])
 df.columns = [str(x).replace(' ','_').replace(',','_').replace('.','_') for x in df.columns]
 ```
+#### 2. Label encoding
+```py
+df['new_col'] = pd.factorize(df.categ_col)[0].reshape(-1,1)
+```
+(or)
+```py
+from sklearn.preprocessing import LabelEncoder
+
+df['new_col'] = LabelEncoder.fit_transform(df.categ_col)
+```
+#### 3. Ordinal encoding
+#### 4. Frequency encoding
+#### 5. Weight of Evidence encoding
+
 
 ### Convert to Float
 ```py
@@ -28,7 +44,7 @@ X_train, X_test, y_train, y_test = train_test_split(
 )
 ```
 
-### Dealing missing values
+### Missing values
 1. Create a new Category
 2. Delete
 3. Impute from Average
