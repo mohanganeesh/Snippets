@@ -28,6 +28,12 @@ X_train, X_test, y_train, y_test = train_test_split(
 )
 ```
 
+### Dealing missing values
+1. Create a new Category
+2. Delete
+3. Impute from Average
+4. Impute from Last Value
+
 ## Model Fitting
 
 ### Classifier - XGBoost
