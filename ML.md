@@ -12,8 +12,8 @@ df[numeric_cols] = df[numeric_cols].astype(‘float’)
 
 ### Balanced Sampling
 ```py
-df_balanced = pd.concat([df.loc[df.ylabel==1], \
-	df.loc[df.ylabel==0].sample(sum(df.ylabel==1)) ], axis = 0).reset_index(). # Swap 0 & 1 when 1 needs to sampled down
+df_balanced = pd.concat([df.loc[df[y_col]==1], \
+	df.loc[df[y_col]==0].sample(sum(df[y_col]==1)) ], axis = 0).reset_index()  # Swap 0 & 1 when 1 needs to sampled down
 ```
 
 ### Train Test Split
