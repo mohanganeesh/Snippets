@@ -50,9 +50,16 @@ X_train, X_test, y_train, y_test = train_test_split(
 3. Impute from Average
 4. Impute from Last Value
 
-## Model Fitting
+### Dimensionality Reduction
 
-### Classifier - XGBoost
+## Modeling
+
+### TimeSeries Forecasting
+
+### Regression
+
+### Classification
+#### XGBoost Classifier
 ```py
 from xgboost import XGBClassifier
 clf = XGBClassifier()
@@ -62,8 +69,7 @@ y_pred=clf.predict(X_test)
 y_train_pred=clf.predict(X_train)
 ```
 
-
-### Classifier - Logit
+#### Logit Classifier
 ```py
 from sklearn.linear_model import LogisticRegression
 
@@ -72,6 +78,9 @@ y_test_pred_prob = clf.predict_proba(X_test)
 y_test_pred = clf.predict(X_test)
 y_train_pred = clf.predict(X_train)
 ```
+
+### Clustering
+
 
 ## Evaluation
 
