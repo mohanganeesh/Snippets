@@ -3,7 +3,7 @@
 (More types: https://towardsdatascience.com/all-about-categorical-variable-encoding-305f3361fd02)
 #### 1. One Hot encoding
 ```py
-df = pd.get_dummies(df, columns=[categ_column_names])
+df = pd.get_dummies(df, columns=[categ_column_names]) # Use df.columns[df.dtypes == object] to review categ columns
 df.columns = [str(x).replace(' ','_').replace(',','_').replace('.','_') for x in df.columns]
 ```
 #### 2. Label encoding
