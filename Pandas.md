@@ -148,6 +148,10 @@ df.sort_values('trips_per_user') #Sorts rows based on values in trips_per_user
 ```python
 df.sort_index(axis=1,level=0)  # Sorts columns by their names. axis 1 refers to columns. level 0 is the highest/default level
 ```
+###### Rank Rows
+```python
+df.groupby([partition_cols])[sort_cols].rank(method='first', ascending=False) #First replicates rank functionality in Presto
+```
 ## Group by
 
 ###### Group by example
