@@ -192,7 +192,7 @@ synthetic_states = Parallel(n_jobs=8)(parallel_fn(state) for state in control_po
 ```py
 from joblib import Parallel, delayed 
 
-def wald_rdd(data):
+def wald(data):
     weights=kernel(data["minscore"], c=0, h=15)*data["n"]
     denominator = smf.wls("receivehsd~minscore*threshold", data, weights=weights).fit()
     numerator = smf.wls("avgearnings~minscore*threshold", data, weights=weights).fit()
@@ -200,7 +200,7 @@ def wald_rdd(data):
 
 np.random.seed(45)
 bootstrap_sample = 1000
-ates = Parallel(n_jobs=4)(delayed(wald_rdd)(sheepsking_rdd.sample(frac=1, replace=True)) #Is RDD same as DF?
+ates = Parallel(n_jobs=4)(delayed(wald)(sheepsking_df.sample(frac=1, replace=True)) 
                           for _ in range(bootstrap_sample))
 ates = np.array(ates)
 
