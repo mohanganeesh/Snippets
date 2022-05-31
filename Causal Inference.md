@@ -124,3 +124,84 @@ ates = np.array(ates)
 
 print(f"ATE 95% CI:", (np.percentile(ates, 2.5), np.percentile(ates, 97.5)))
 ```
+
+## PanelOLS Estimator (for Panel data with multiple snapshots of same user)
+```py
+
+from linearmodels.panel import PanelOLS
+mod = PanelOLS.from_formula("outcome ~ var1+var2+EntityEffects+TimeEffects",
+                            data=data.set_index(["userid", "date"]))
+
+result = mod.fit(cov_type='clustered', cluster_entity=True, cluster_time=True)
+result.summary.tables[1]
+```
+
+## Synthetic Control
+```py
+#Step 0: Define functions
+from typing import List
+from operator import add
+from toolz import reduce, partial
+from scipy.optimize import fmin_slsqp
+
+def loss_w(W, X, y) -> float:
+    return np.sqrt(np.mean((y - X.dot(W))**2))
+
+def get_w(X, y):
+    
+    w_start = [1/X.shape[1]]*X.shape[1]
+
+    weights = fmin_slsqp(partial(loss_w, X=X, y=y),
+                         np.array(w_start),
+                         f_eqcons=lambda x: np.sum(x) - 1,
+                         bounds=[(0.0, 1.0)]*len(w_start),
+                         disp=False)
+    return weights
+
+#Example used below to form synthetic control of states; update naming to entity used
+def synthetic_control(state: int, data: pd.DataFrame) -> np.array:
+    
+    features = ["cigsale", "retprice"] # Metrics which should be match in pre-period
+    inverted = (data.query("~after_treatment")
+                .pivot(index='state', columns="year")[features]
+                .T)
+    y = inverted[state].values # treated
+    X = inverted.drop(columns=state).values # donor pool
+    
+    weights = get_w(X, y)
+    synthetic = (data.query(f"~(state=={state})")
+                 .pivot(index='year', columns="state")["cigsale"]
+                 .values.dot(weights))
+
+    return (data
+            .query(f"state=={state}")[["state", "year", "cigsale", "after_treatment"]]
+            .assign(synthetic=synthetic))
+          
+#Step 1: Generate synthetic pool
+from joblib import Parallel, delayed
+
+control_pool = cigar["state"].unique()
+parallel_fn = delayed(partial(synthetic_control, data=cigar))
+synthetic_states = Parallel(n_jobs=8)(parallel_fn(state) for state in control_pool)
+
+#Step2: Estimate lifts
+
+```
+
+## Regression Discontinuity
+```py
+from joblib import Parallel, delayed 
+
+def wald_rdd(data):
+    weights=kernel(data["minscore"], c=0, h=15)*data["n"]
+    denominator = smf.wls("receivehsd~minscore*threshold", data, weights=weights).fit()
+    numerator = smf.wls("avgearnings~minscore*threshold", data, weights=weights).fit()
+    return numerator.params["threshold"]/denominator.params["threshold"]
+
+np.random.seed(45)
+bootstrap_sample = 1000
+ates = Parallel(n_jobs=4)(delayed(wald_rdd)(sheepsking_rdd.sample(frac=1, replace=True)) #Is RDD same as DF?
+                          for _ in range(bootstrap_sample))
+ates = np.array(ates)
+
+```
