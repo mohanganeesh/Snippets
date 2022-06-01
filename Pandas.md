@@ -422,12 +422,12 @@ df.groupby('type').boxplot()
 ```
 ###### Scatter Matrix
 ```python
-scatter_matrix(df, alpha=0.2, figsize=(6, 6), diagonal='kde')
+pd.plotting.scatter_matrix(df, alpha=0.2, figsize=(6, 6), diagonal='kde')
 ```
 
 ###### Bootstrap Plot
 ```python
-bootstrap_plot(data, size=50, samples=500, color='grey')
+pd.plotting.bootstrap_plot(data, size=50, samples=500, color='grey')
 ```
 
 More vizualizations [here](https://pandas.pydata.org/pandas-docs/stable/visualization.html)
