@@ -80,7 +80,12 @@ y_train_pred = clf.predict(X_train)
 ```
 
 ### Clustering
+#### Gaussian Mixture Modeling (GMM)
+```py
+from sklearn.mixture import GaussianMixture
 
+df['cluster'] = GaussianMixture(n_components=3).fit_predict(df[cluster_cols]) # Where 3 is the number of clusters
+```
 
 ## Evaluation
 
