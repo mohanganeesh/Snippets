@@ -22,6 +22,11 @@ FROM tablename
 CROSS JOIN UNNEST(array_col) as col(val)
 ```
 
+## Window functions
+```sql
+SELECT LEAD(x [, offset, default_value])
+```
+
 ## Aggregation
 
 #### Col value corresponding to max value of other col
