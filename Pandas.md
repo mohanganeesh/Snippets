@@ -19,7 +19,7 @@
 - [Add/Remove rows & columns](#addremove-rows--columns)
    - [Add Rows](#add-rows) | [Add columns](#add-columns) | [Remove rows](#remove-rows) | [Remove columns](#remove-columns) | [Remove a level from multi-level index](#remove-a-level-from-multi-level-index)
 - [Visualizations](#visualizations)
-   - [Simple charts](#simple-charts) | [Histogram](#histogram) | [Boxplot for each group](#boxplot-for-each-group) | [Scatter Matrix](#scatter-matrix) | [Bootstrap Plot](#bootstrap-plot)
+   - [Simple charts](#simple-charts) | [Histogram](#histogram) | [Boxplot for each group](#boxplot-for-each-group) | [Scatter Matrix](#scatter-matrix) | [Bootstrap Plot](#bootstrap-plot) | [Venn Diagram](#venn)
 
 <small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
 
@@ -414,7 +414,34 @@ df.plot(subplots=True, figsize=(6, 6), layout=(3, -1)) # Layout -1 is to infer t
 %matplotlib inline 
 df.hist(bins=100, figsize=(40,30))
 ```
+###### Venn
+```sql
+--SQL for df
+SELECT
+	groupA,
+	groupB,
+	count(1) metric
+FROM table
+GROUP BY 1,2
+```
+```python
+from matplotlib_venn import venn2, venn3 #use venn3 for 3 circles
 
+def venn(df, labels, metric):
+    total = df.sum()[metric]
+    agg_df = df.groupby(labels).sum()
+    agg_df.index = [
+        str(agg_df.index.get_level_values(0)[i])
+        + str(agg_df.index.get_level_values(1)[i])
+	#+ str(agg_df.index.get_level_values(2)[i]) #needed only for venn3
+        for i in range(len(agg_df))
+    ]
+    subsets = agg_df.to_dict()[metric]
+    #venn3(subsets = subsets , set_labels = labels, alpha = 0.5, subset_label_formatter=lambda x: f"{(x/total):1.0%}") # for % of Total
+    venn2(subsets = subsets , set_labels = labels, alpha = 0.5, subset_label_formatter=lambda x: f"{(str(int(x/1000))+'K')}") # for absolute values in K
+
+venn(df, ["groupA","groupB"],"metric")
+  ```
 ###### Boxplot for each group
 ```python
 %matplotlib inline 
